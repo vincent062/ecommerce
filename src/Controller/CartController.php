@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Repository\ProductRepository;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
@@ -40,27 +41,32 @@ class CartController extends AbstractController
         ]);
     }
 
-    #[Route('/cart/add/{id}', name: 'cart_add')]
-    public function add(int $id, RequestStack $requestStack): Response
+#[Route('/cart/add/{id}', name: 'cart_add')]
+    public function add($id, Request $request, RequestStack $requestStack): Response
     {
-        // 1. On récupère la session
         $session = $requestStack->getSession();
         $cart = $session->get('cart', []);
 
-        // 2. On ajoute le produit (ou on augmente la quantité)
+        // On récupère la quantité envoyée par le formulaire (par défaut = 1)
+        $qty = $request->request->get('qty', 1);
+        
+        // On s'assure que c'est un entier positif
+        $qty = (int)$qty;
+        if ($qty < 1) { $qty = 1; }
+
+        // Si le produit existe déjà, on ajoute la quantité
         if (!empty($cart[$id])) {
-            $cart[$id]++;
+            $cart[$id] += $qty;
         } else {
-            $cart[$id] = 1;
+            // Sinon on l'initialise avec la quantité choisie
+            $cart[$id] = $qty;
         }
 
-        // 3. On sauvegarde le panier dans la session
         $session->set('cart', $cart);
 
-        // 4. On redirige vers le panier
+        // On redirige vers le panier (ou on reste sur la page, au choix)
         return $this->redirectToRoute('cart_index');
     }
-
     #[Route('/cart/remove/{id}', name: 'cart_remove')]
     public function remove(int $id, RequestStack $requestStack): Response
     {
