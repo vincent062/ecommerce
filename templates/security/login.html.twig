@@ -1,34 +1,89 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Log in!{% endblock %}
+{% block title %}Connexion - Sunset Shop{% endblock %}
 
 {% block body %}
-<form method="post">
-    {% if error %}
-        <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-    {% endif %}
+<div class="min-h-[calc(100vh-80px)] flex items-center justify-center bg-stone-50 py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+    
+    {# Fond d'ambiance (Glow derrière la carte) #}
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-gradient-to-br from-orange-400 to-purple-600 rounded-full blur-3xl opacity-20 pointer-events-none"></div>
 
-    {% if app.user %}
-        <div class="mb-3">
-            You are logged in as {{ app.user.userIdentifier }}, <a href="{{ logout_path() }}">Logout</a>
+    <div class="max-w-md w-full space-y-8 relative z-10">
+        
+        {# CARTE DE CONNEXION #}
+        <div class="bg-stone-900 p-8 md:p-10 rounded-3xl shadow-2xl border border-stone-800">
+            
+            <div class="text-center mb-8">
+                {# Petit logo animé #}
+                <div class="mx-auto h-12 w-12 bg-gradient-to-br from-orange-500 to-purple-600 rounded-xl flex items-center justify-center text-white font-black text-xl shadow-lg mb-4 transform hover:rotate-12 transition duration-500">
+                    S
+                </div>
+                <h2 class="text-3xl font-black text-white tracking-tight">
+                    Bon retour
+                </h2>
+                <p class="mt-2 text-sm text-stone-400">
+                    Connectez-vous pour retrouver votre panier
+                </p>
+            </div>
+
+            <form class="mt-8 space-y-6" method="post">
+                {% if error %}
+                    <div class="bg-rose-500/10 border border-rose-500 text-rose-500 text-sm rounded-xl p-4 mb-4 flex items-center" role="alert">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                        </svg>
+                        {{ error.messageKey|trans(error.messageData, 'security') }}
+                    </div>
+                {% endif %}
+
+                {% if app.user %}
+                    <div class="mb-3 text-stone-300 text-sm text-center bg-stone-800 py-2 rounded-lg">
+                        Vous êtes connecté en tant que <span class="font-bold text-white">{{ app.user.userIdentifier }}</span>, <a href="{{ path('app_logout') }}" class="text-orange-500 hover:text-orange-400 underline">Déconnexion</a>
+                    </div>
+                {% endif %}
+
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+                <div class="space-y-4">
+                    <div>
+                        <label for="inputEmail" class="sr-only">Email</label>
+                        <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="appearance-none rounded-xl relative block w-full px-4 py-3 border border-stone-700 bg-stone-800 placeholder-stone-500 text-white focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent focus:z-10 sm:text-sm transition duration-200" placeholder="Adresse Email" autocomplete="email" required autofocus>
+                    </div>
+                    <div>
+                        <label for="inputPassword" class="sr-only">Mot de passe</label>
+                        <input type="password" name="password" id="inputPassword" class="appearance-none rounded-xl relative block w-full px-4 py-3 border border-stone-700 bg-stone-800 placeholder-stone-500 text-white focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent focus:z-10 sm:text-sm transition duration-200" placeholder="Mot de passe" autocomplete="current-password" required>
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center">
+                        <input id="remember_me" name="_remember_me" type="checkbox" class="h-4 w-4 text-orange-600 focus:ring-orange-500 border-stone-700 rounded bg-stone-800 cursor-pointer">
+                        <label for="remember_me" class="ml-2 block text-sm text-stone-400 cursor-pointer hover:text-stone-300">
+                            Se souvenir de moi
+                        </label>
+                    </div>
+
+                    <div class="text-sm">
+                        <a href="#" class="font-medium text-orange-500 hover:text-orange-400 transition">
+                            Mot de passe oublié ?
+                        </a>
+                    </div>
+                </div>
+
+                <div>
+                    <button type="submit" class="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-bold rounded-xl text-white bg-gradient-to-r from-orange-500 to-rose-600 hover:from-orange-600 hover:to-rose-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-stone-900 focus:ring-orange-500 transition duration-300 shadow-lg hover:shadow-orange-500/20 hover:scale-[1.02]">
+                        Se connecter
+                    </button>
+                </div>
+            </form>
+            
+            <div class="mt-8 pt-6 border-t border-stone-800 text-center">
+                 <p class="text-stone-500 text-sm">
+                    Pas encore de compte ? 
+                    <a href="#" class="text-white hover:text-orange-400 font-bold transition ml-1">Créer un compte</a>
+                 </p>
+            </div>
         </div>
-    {% endif %}
-
-    <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-    <label for="inputEmail">Email</label>
-    <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" autocomplete="email" required autofocus>
-    <label for="inputPassword">Password</label>
-    <input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
-    <input type="hidden" name="_csrf_token" data-controller="csrf-protection" value="{{ csrf_token('authenticate') }}">
-
-    <div class="checkbox mb-3">
-        <label>
-            <input type="checkbox" name="_remember_me"> Remember me
-        </label>
     </div>
-
-    <button class="btn btn-lg btn-primary" type="submit">
-        Sign in
-    </button>
-</form>
+</div>
 {% endblock %}

@@ -3,12 +3,11 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Product;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\MoneyField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 
 class ProductCrudController extends AbstractCrudController
@@ -23,11 +22,16 @@ class ProductCrudController extends AbstractCrudController
     {
         return [
             TextField::new('name', 'Nom du produit'),
-            // TextField::new('slug', 'Slug')->hideOnIndex(),
             TextField::new('description', 'Description'),
-            MoneyField::new('price', 'Prix')->setCurrency('EUR'),
+
+            MoneyField::new('price', 'Prix')->setCurrency('EUR')->setStoredAsCents(false),
             IntegerField::new('stock', 'Stock'),
-            TextField::new('image', 'Nom du fichier Image'), // Champ texte temporaire pour l'image
+
+            ImageField::new('image', 'Image du Produit')
+            ->setBasePath('uploads/')
+            ->setUploadDir('public/uploads/') // Champ texte temporaire pour l'image
+            ->setUploadedFileNamePattern('[randomhash].[extension]') // Renomme le fichier pour éviter les doublons
+            ->setRequired(false), // Permet d'éditer le produit sans devoir ré-uploader l'image
             
             // C'est ce champ magique qui permet de choisir la catégorie :
             AssociationField::new('category', 'Catégorie')

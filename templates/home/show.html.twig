@@ -1,0 +1,98 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ product.name }} - Sunset Shop{% endblock %}
+
+{% block body %}
+    <div class="bg-stone-50 min-h-screen py-12 flex items-center justify-center">
+        <div class="container mx-auto px-4">
+            
+            {# Bouton Retour #}
+            <a href="{{ path('app_home') }}" class="inline-flex items-center text-stone-500 hover:text-orange-600 font-bold mb-8 transition duration-300">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                </svg>
+                Retour à la boutique
+            </a>
+
+            {# CARTE PRODUIT GÉANTE #}
+            <div class="bg-white rounded-3xl shadow-2xl overflow-hidden flex flex-col lg:flex-row border border-stone-100 relative">
+                
+                {# Décoration de fond (Glow) #}
+                <div class="absolute top-0 right-0 -mt-20 -mr-20 w-80 h-80 bg-gradient-to-br from-orange-400 to-purple-600 rounded-full blur-3xl opacity-20 pointer-events-none"></div>
+
+                {# COLONNE GAUCHE : IMAGE #}
+                <div class="lg:w-1/2 bg-stone-100 relative min-h-[400px] lg:min-h-[600px]">
+                    {% if product.image %}
+                        <img src="{{ asset('uploads/' ~ product.image) }}" 
+                             alt="{{ product.name }}" 
+                             class="absolute inset-0 w-full h-full object-cover">
+                    {% else %}
+                        <div class="flex items-center justify-center h-full text-stone-300">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-32 w-32" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                            </svg>
+                        </div>
+                    {% endif %}
+                </div>
+
+                {# COLONNE DROITE : INFO #}
+                <div class="lg:w-1/2 p-10 lg:p-16 flex flex-col justify-center relative z-10">
+                    
+                    {# Catégorie #}
+                    <div class="mb-4">
+                        <span class="bg-orange-100 text-orange-700 text-xs font-black uppercase tracking-widest px-3 py-1 rounded-full">
+                            {{ product.category ? product.category.name : 'Collection' }}
+                        </span>
+                    </div>
+
+                    {# Titre #}
+                    <h1 class="text-4xl lg:text-5xl font-black text-stone-900 mb-6 leading-tight">
+                        {{ product.name }}
+                    </h1>
+
+                    {# Prix et Stock #}
+                    <div class="flex items-center gap-6 mb-8">
+                        <span class="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-purple-600">
+                            {{ product.price }} €
+                        </span>
+                        
+                        {% if product.stock > 0 %}
+                            <div class="flex items-center text-emerald-600 font-bold bg-emerald-50 px-3 py-1 rounded-lg">
+                                <span class="w-2 h-2 bg-emerald-500 rounded-full mr-2 animate-pulse"></span>
+                                En stock
+                            </div>
+                        {% else %}
+                            <div class="flex items-center text-rose-600 font-bold bg-rose-50 px-3 py-1 rounded-lg">
+                                <span class="w-2 h-2 bg-rose-500 rounded-full mr-2"></span>
+                                Épuisé
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    {# Description #}
+                    <p class="text-stone-500 text-lg leading-relaxed mb-10 border-l-4 border-orange-200 pl-4">
+                        {{ product.description }}
+                    </p>
+
+                    {# Actions #}
+                    <div class="flex gap-4 mt-auto">
+                    <a href="{{ path('cart_add', {id: product.id}) }}" class="flex-1 bg-stone-900 text-white font-bold py-4 rounded-xl hover:bg-gradient-to-r hover:from-orange-500 hover:to-purple-600 transition-all duration-300 shadow-lg hover:shadow-orange-500/40 flex items-center justify-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                        </svg>
+                              Ajouter au panier
+                    </a>
+                        
+                        <button class="p-4 border border-stone-200 rounded-xl text-stone-400 hover:text-rose-500 hover:border-rose-200 transition duration-300">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12.1 18.55l-.1.1-.1-.1C7.14 14.24 4 11.39 4 8.5 4 6.5 5.5 5 7.5 5c1.54 0 3.04.99 3.57 2.36h1.87C13.46 5.99 14.96 5 16.5 5c2 0 3.5 1.5 3.5 3.5 0 2.89-3.14 5.74-7.9 10.05zM16.5 3c-1.74 0-3.41.81-4.5 2.09C10.91 3.81 9.24 3 7.5 3 4.42 3 2 5.42 2 8.5c0 3.78 4.16 7.9 8.8 12.1l1.2 1.09 1.2-1.09C17.84 16.4 22 12.28 22 8.5 22 5.42 19.58 3 16.5 3z"/>
+                            </svg>
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+{% endblock %}

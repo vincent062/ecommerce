@@ -2,18 +2,99 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
+        <title>{% block title %}Sunset Shop{% endblock %}</title>
+        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>🌅</text></svg>">
         <script src="https://cdn.tailwindcss.com"></script>
+        
+        {# Petite animation pour le badge du panier #}
+        <style>
+            @keyframes bounce-short {
+                0%, 100% { transform: translateY(0); }
+                50% { transform: translateY(-25%); }
+            }
+            .animate-badge {
+                animation: bounce-short 0.5s ease-in-out;
+            }
+        </style>
 
-        {% block stylesheets %}
-        {% endblock %}
+        {% block stylesheets %}{% endblock %}
 
         {% block javascripts %}
             {% block importmap %}{{ importmap('app') }}{% endblock %}
         {% endblock %}
     </head>
-    <body>
-        {% block body %}{% endblock %}
+    <body class="bg-stone-50 flex flex-col min-h-screen font-sans">
+        
+        {# --- 1. LOGIQUE DE COMPTAGE DU PANIER (Magie Twig) --- #}
+        {% set cart_count = 0 %}
+        {# On vérifie si la session existe, puis on additionne les quantités #}
+        {% if app.session %}
+            {% for count in app.session.get('cart', []) %}
+                {% set cart_count = cart_count + count %}
+            {% endfor %}
+        {% endif %}
+        {# ---------------------------------------------------- #}
+
+        {# --- 2. BARRE DE NAVIGATION (NAVBAR) --- #}
+        <nav class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-stone-100 shadow-sm">
+            <div class="container mx-auto px-4">
+                <div class="flex items-center justify-between h-20">
+                    
+                    {# LOGO #}
+                    <a href="{{ path('app_home') }}" class="flex items-center gap-3 group">
+                        <div class="w-10 h-10 bg-gradient-to-b from-orange-400 to-rose-500 rounded-full flex items-center justify-center text-white font-serif italic text-xl shadow-md group-hover:scale-110 transition duration-300">
+                            G
+                        </div>
+                        <div class="flex flex-col">
+                            <span class="text-xl font-serif font-bold text-stone-900 leading-none">
+                                Golden<span class="text-rose-500">Hour</span>
+                            </span>
+                            <span class="text-[10px] text-stone-400 uppercase tracking-[0.2em]">Maison & Déco</span>
+                        </div>
+                    </a>
+
+                    {# ACTIONS #}
+                    <div class="flex items-center gap-6">
+                        
+                        {# Lien Admin (Discret) #}
+                        <a href="/admin" class="hidden md:block text-stone-400 hover:text-stone-800 font-semibold text-sm transition">
+                            Admin
+                        </a>
+
+                        {# BOUTON PANIER #}
+                        <a href="{{ path('cart_index') }}" class="relative group p-2">
+                            {# Icône Panier #}
+                            <div class="text-stone-600 group-hover:text-orange-600 transition duration-300">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                                </svg>
+                            </div>
+
+                            {# BADGE COMPTEUR (S'affiche seulement si > 0) #}
+                            {% if cart_count > 0 %}
+                                <span class="absolute -top-1 -right-1 bg-rose-600 text-white text-xs font-bold h-6 w-6 flex items-center justify-center rounded-full border-2 border-white shadow-md animate-badge">
+                                    {{ cart_count }}
+                                </span>
+                            {% endif %}
+                        </a>
+
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        {# --- 3. CONTENU DES PAGES --- #}
+        <main class="flex-grow">
+            {% block body %}{% endblock %}
+        </main>
+
+        {# --- 4. FOOTER SIMPLE --- #}
+        <footer class="bg-stone-900 text-stone-400 py-12 border-t border-stone-800">
+            <div class="container mx-auto px-4 text-center">
+                <p class="font-medium mb-4">Fait avec ❤️ pour le code</p>
+                <p class="text-xs text-stone-600">&copy; {{ 'now'|date('Y') }} Sunset Shop. Tous droits réservés.</p>
+            </div>
+        </footer>
+
     </body>
 </html>

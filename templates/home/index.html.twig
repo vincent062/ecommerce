@@ -1,47 +1,105 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Accueil - Mon E-Commerce{% endblock %}
+{% block title %}Golden Hour - Bien-être & Maison{% endblock %}
 
 {% block body %}
-    <div class="container mx-auto mt-10 px-4">
-        <h1 class="text-3xl font-bold mb-8 text-gray-800">Nos Produits</h1>
+    {# 1. Section HERO : Ambiance Cocooning #}
+    {# Dégradé chaud et apaisant #}
+    <div class="relative bg-gradient-to-br from-orange-100 via-rose-100 to-amber-100 text-stone-800 py-28 overflow-hidden shadow-sm">
+        
+        {# Formes d'ambiance douces #}
+        <div class="absolute top-0 right-0 -mt-20 -mr-20 w-96 h-96 bg-orange-300 rounded-full blur-3xl opacity-30 pointer-events-none"></div>
+        <div class="absolute bottom-0 left-0 -mb-20 -ml-20 w-80 h-80 bg-rose-300 rounded-full blur-3xl opacity-30 pointer-events-none"></div>
 
-        {# Grille responsive : 1 colonne sur mobile, 3 colonnes sur écran moyen #}
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="container mx-auto px-4 text-center relative z-10">
+            <span class="text-orange-600 font-bold tracking-[0.3em] uppercase text-xs mb-4 block">
+                Collection Automne / Hiver
+            </span>
+            <h1 class="text-5xl md:text-7xl font-serif font-medium mb-6 text-stone-900 tracking-tight">
+                Le temps de <span class="italic text-rose-600">s'apaiser</span>.
+            </h1>
+            <p class="text-xl md:text-2xl text-stone-600 mb-10 font-light max-w-2xl mx-auto leading-relaxed">
+                Bougies artisanales, parfums d'intérieur et objets de décoration pour transformer votre maison en un sanctuaire.
+            </p>
             
-            {% for product in products %}
-                <div class="border border-gray-200 rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
-                    
-                    {# Image (via placeholder pour l'instant) #}
-                    <img src="{{ asset('uploads/' ~ product.image) }}" alt="{{ product.name }}" class="w-full h-48 object-cover">
-                    <div class="p-6">
-                        <div class="flex justify-between items-start">
-                            <div>
-                                <h3 class="text-xl font-semibold text-gray-900 mb-2">{{ product.name }}</h3>
-                                <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">
-                                    {{ product.category }}
-                                </span>
+            <a href="#products" class="inline-flex items-center justify-center px-10 py-4 text-lg font-medium text-white transition-all duration-300 bg-stone-900 rounded-full hover:bg-rose-600 hover:shadow-xl hover:-translate-y-1">
+                Découvrir la boutique
+            </a>
+        </div>
+    </div>
+
+    {# 2. Section PRODUITS #}
+    <div id="products" class="bg-white min-h-screen py-20">
+        <div class="container mx-auto px-4">
+            
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-serif text-stone-900 mb-4">
+                    Nos Essentiels
+                </h2>
+                <div class="w-24 h-1 bg-gradient-to-r from-orange-300 to-rose-300 mx-auto rounded-full"></div>
+                <p class="text-stone-500 mt-4 max-w-md mx-auto">
+                    Une sélection soignée pour éveiller vos sens et réchauffer votre intérieur.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
+                
+                {% for product in products %}
+                    {# CARTE MINIMALISTE & CHIC #}
+                    <div class="group cursor-pointer">
+                        
+                        {# IMAGE (Aspect Ratio Portrait pour le style déco) #}
+                        <div class="relative h-[450px] overflow-hidden rounded-xl bg-stone-100 mb-6">
+                            {% if product.image %}
+                                <img src="{{ asset('uploads/' ~ product.image) }}" 
+                                     alt="{{ product.name }}" 
+                                     class="w-full h-full object-cover transition duration-700 ease-in-out group-hover:scale-105">
+                            {% else %}
+                                <div class="w-full h-full flex items-center justify-center text-stone-300">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 opacity-50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                    </svg>
+                                </div>
+                            {% endif %}
+
+                            {# Bouton d'ajout rapide (Apparaît au survol) #}
+                            <div class="absolute bottom-4 left-0 right-0 px-4 opacity-0 group-hover:opacity-100 transition duration-300 translate-y-4 group-hover:translate-y-0">
+                                <a href="{{ path('cart_add', {id: product.id}) }}" class="block w-full py-3 bg-white/90 backdrop-blur text-stone-900 text-center font-bold text-sm uppercase tracking-wider rounded shadow-lg hover:bg-stone-900 hover:text-white transition-colors">
+                                    Ajouter au panier — {{ product.price }} €
+                                </a>
                             </div>
-                            <span class="text-lg font-bold text-indigo-600">
-                                {{ (product.price / 100) | number_format(2, ',', ' ') }} €
+
+                            {# Badge Nouveauté #}
+                            <span class="absolute top-4 left-4 bg-white px-3 py-1 text-xs font-bold uppercase tracking-widest text-stone-900 shadow-sm">
+                                Nouveau
                             </span>
                         </div>
-                        
-                        <p class="text-gray-600 mt-2 text-sm">
-                            {{ product.description }}
-                        </p>
 
-                        <div class="mt-4">
-                            <button class="w-full bg-indigo-600 text-white font-bold py-2 px-4 rounded hover:bg-indigo-700 transition duration-300">
-                                Voir le produit
-                            </button>
+                        {# INFO PRODUIT #}
+                        <div class="text-center">
+                            <div class="text-xs text-rose-500 font-bold uppercase tracking-widest mb-2">
+                                {{ product.category ? product.category.name : 'Maison' }}
+                            </div>
+                            <h3 class="text-xl font-serif text-stone-900 mb-1 group-hover:text-rose-600 transition-colors">
+                                <a href="{{ path('app_product_show', {id: product.id}) }}">
+                                    {{ product.name }}
+                                </a>
+                            </h3>
+                            <p class="text-stone-500 text-sm line-clamp-1 mb-2">
+                                {{ product.description }}
+                            </p>
+                            <span class="text-stone-900 font-medium">
+                                {{ product.price }} €
+                            </span>
                         </div>
                     </div>
-                </div>
-            {% else %}
-                <p class="text-gray-500">Aucun produit trouvé.</p>
-            {% endfor %}
+                {% else %}
+                    <div class="col-span-3 text-center py-20 bg-stone-50 rounded-xl border border-dashed border-stone-200">
+                        <p class="text-stone-500 text-lg font-serif italic">Notre collection arrive bientôt...</p>
+                    </div>
+                {% endfor %}
 
+            </div>
         </div>
     </div>
 {% endblock %}

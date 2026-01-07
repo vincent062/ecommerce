@@ -28,7 +28,7 @@ class DashboardController extends AbstractDashboardController
     public function configureDashboard(): Dashboard
     {
         return Dashboard::new()
-            ->setTitle('Mon E-Commerce');
+            ->setTitle('<span style="color: #f97316;">Sunset</span><span style="color: #e11d48;">Shop</span>');
     }
 
     public function configureMenuItems(): iterable
