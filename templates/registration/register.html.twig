@@ -1,0 +1,107 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Créer un compte - Golden Hour{% endblock %}
+
+{% block body %}
+<div class="min-h-[calc(100vh-80px)] flex items-center justify-center bg-stone-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-md w-full space-y-8 bg-white p-10 rounded-3xl shadow-xl border border-stone-100">
+        
+        <div class="text-center">
+            <h2 class="mt-6 text-center text-3xl font-serif font-bold text-stone-900">
+                Bienvenue chez nous
+            </h2>
+            <p class="mt-2 text-center text-sm text-stone-500">
+                Créez votre compte pour suivre vos commandes.
+            </p>
+        </div>
+
+        {# Début du formulaire #}
+        {{ form_start(registrationForm, {'attr': {'class': 'mt-8 space-y-6'}}) }}
+            
+            {# Erreurs globales #}
+            {% if form_errors(registrationForm) %}
+                <div class="bg-red-50 text-red-600 p-3 rounded-lg text-sm text-center border border-red-200">
+                    {{ form_errors(registrationForm) }}
+                </div>
+            {% endif %}
+
+            <div class="space-y-4">
+                
+                {# PRÉNOM #}
+                <div>
+                    <label for="registration_form_firstname" class="block text-xs font-bold text-stone-500 uppercase tracking-wider mb-1">Prénom</label>
+                    {{ form_widget(registrationForm.firstname, {
+                        'attr': {
+                            'class': 'appearance-none rounded-xl relative block w-full px-4 py-3 border border-stone-300 placeholder-stone-400 text-stone-900 focus:outline-none focus:ring-rose-500 focus:border-rose-500 focus:z-10 sm:text-sm',
+                            'placeholder': 'Votre prénom'
+                        }
+                    }) }}
+                    <div class="text-rose-500 text-xs mt-1 font-bold">{{ form_errors(registrationForm.firstname) }}</div>
+                </div>
+
+                {# NOM #}
+                <div>
+                    <label for="registration_form_lastname" class="block text-xs font-bold text-stone-500 uppercase tracking-wider mb-1">Nom</label>
+                    {{ form_widget(registrationForm.lastname, {
+                        'attr': {
+                            'class': 'appearance-none rounded-xl relative block w-full px-4 py-3 border border-stone-300 placeholder-stone-400 text-stone-900 focus:outline-none focus:ring-rose-500 focus:border-rose-500 focus:z-10 sm:text-sm',
+                            'placeholder': 'Votre nom'
+                        }
+                    }) }}
+                    <div class="text-rose-500 text-xs mt-1 font-bold">{{ form_errors(registrationForm.lastname) }}</div>
+                </div>
+
+                {# EMAIL #}
+                <div>
+                    <label for="registration_form_email" class="block text-xs font-bold text-stone-500 uppercase tracking-wider mb-1">Email</label>
+                    {{ form_widget(registrationForm.email, {
+                        'attr': {
+                            'class': 'appearance-none rounded-xl relative block w-full px-4 py-3 border border-stone-300 placeholder-stone-400 text-stone-900 focus:outline-none focus:ring-rose-500 focus:border-rose-500 focus:z-10 sm:text-sm',
+                            'placeholder': 'exemple@email.com'
+                        }
+                    }) }}
+                    <div class="text-rose-500 text-xs mt-1 font-bold">{{ form_errors(registrationForm.email) }}</div>
+                </div>
+
+                {# MOT DE PASSE #}
+                <div>
+                    <label for="registration_form_plainPassword" class="block text-xs font-bold text-stone-500 uppercase tracking-wider mb-1">Mot de passe</label>
+                    {{ form_widget(registrationForm.plainPassword, {
+                        'attr': {
+                            'class': 'appearance-none rounded-xl relative block w-full px-4 py-3 border border-stone-300 placeholder-stone-400 text-stone-900 focus:outline-none focus:ring-rose-500 focus:border-rose-500 focus:z-10 sm:text-sm',
+                            'placeholder': '••••••••'
+                        }
+                    }) }}
+                    <div class="text-rose-500 text-xs mt-1 font-bold">{{ form_errors(registrationForm.plainPassword) }}</div>
+                </div>
+
+                {# CHECKBOX CGU #}
+                <div class="flex items-center">
+                    {{ form_widget(registrationForm.agreeTerms, {'attr': {'class': 'h-4 w-4 text-rose-600 focus:ring-rose-500 border-stone-300 rounded'}}) }}
+                    <label class="ml-2 block text-sm text-stone-900">
+                        J'accepte les conditions d'utilisation
+                    </label>
+                </div>
+                <div class="text-rose-500 text-xs font-bold">{{ form_errors(registrationForm.agreeTerms) }}</div>
+
+            </div>
+
+            <div>
+                <button type="submit" class="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-bold rounded-xl text-white bg-stone-900 hover:bg-rose-600 transition duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-stone-500 shadow-lg hover:shadow-xl">
+                    Créer mon compte
+                </button>
+            </div>
+
+            <div class="text-center mt-4">
+                <p class="text-sm text-stone-500">
+                    Déjà un compte ? 
+                    <a href="{{ path('app_login') }}" class="font-medium text-rose-600 hover:text-rose-500 underline decoration-2 underline-offset-4">
+                        Se connecter
+                    </a>
+                </p>
+            </div>
+
+        {{ form_end(registrationForm) }}
+    </div>
+</div>
+{% endblock %}

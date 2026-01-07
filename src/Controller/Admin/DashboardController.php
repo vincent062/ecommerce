@@ -2,14 +2,12 @@
 
 namespace App\Controller\Admin;
 
-use App\Entity\Category;
+use App\Entity\Order;
 use App\Entity\Product;
 use App\Entity\User;
-use App\Controller\Admin\CategoryCrudController; // Important pour la redirection
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
-use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator; // Important pour générer l'URL
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
@@ -18,28 +16,33 @@ class DashboardController extends AbstractDashboardController
     #[Route('/admin', name: 'admin')]
     public function index(): Response
     {
-        // 1. On récupère le générateur d'URL d'admin
-        $adminUrlGenerator = $this->container->get(AdminUrlGenerator::class);
-        
-        // 2. On demande de générer une URL vers le contrôleur des Catégories
-        return $this->redirect($adminUrlGenerator->setController(CategoryCrudController::class)->generateUrl());
+        // Option 1 : Rediriger vers la liste des commandes par défaut
+        // $adminUrlGenerator = $this->container->get(AdminUrlGenerator::class);
+        // return $this->redirect($adminUrlGenerator->setController(OrderCrudController::class)->generateUrl());
+
+        // Option 2 : Afficher le dashboard par défaut (page vide pour l'instant)
+        return $this->render('admin/dashboard.html.twig');
     }
 
     public function configureDashboard(): Dashboard
     {
         return Dashboard::new()
-            ->setTitle('<span style="color: #f97316;">Sunset</span><span style="color: #e11d48;">Shop</span>');
+            ->setTitle('Golden Hour Admin');
     }
 
     public function configureMenuItems(): iterable
     {
-        yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
+        yield MenuItem::linkToDashboard('Tableau de bord', 'fa fa-home');
 
-        yield MenuItem::section('Catalogue');
-        yield MenuItem::linkToCrud('Catégories', 'fas fa-list', Category::class);
-        yield MenuItem::linkToCrud('Produits', 'fas fa-tag', Product::class);
-
+        yield MenuItem::section('E-commerce');
+        // Vérifie bien que ces Entités (Product, Order) existent dans ton projet
+        yield MenuItem::linkToCrud('Produits', 'fas fa-box-open', Product::class);
+        yield MenuItem::linkToCrud('Commandes', 'fas fa-shopping-cart', Order::class);
+        
         yield MenuItem::section('Utilisateurs');
-        yield MenuItem::linkToCrud('Clients / Admin', 'fas fa-users', User::class);
+        yield MenuItem::linkToCrud('Clients', 'fas fa-user', User::class);
+
+        yield MenuItem::section('Navigation');
+        yield MenuItem::linkToRoute('Retour au site', 'fa fa-undo', 'app_home');
     }
 }
