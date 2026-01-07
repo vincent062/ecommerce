@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Accueil - Mon E-Commerce{% endblock %}
+
+{% block body %}
+    <div class="container mx-auto mt-10 px-4">
+        <h1 class="text-3xl font-bold mb-8 text-gray-800">Nos Produits</h1>
+
+        {# Grille responsive : 1 colonne sur mobile, 3 colonnes sur écran moyen #}
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            
+            {% for product in products %}
+                <div class="border border-gray-200 rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
+                    
+                    {# Image (via placeholder pour l'instant) #}
+                    <img src="{{ asset('uploads/' ~ product.image) }}" alt="{{ product.name }}" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h3 class="text-xl font-semibold text-gray-900 mb-2">{{ product.name }}</h3>
+                                <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">
+                                    {{ product.category }}
+                                </span>
+                            </div>
+                            <span class="text-lg font-bold text-indigo-600">
+                                {{ (product.price / 100) | number_format(2, ',', ' ') }} €
+                            </span>
+                        </div>
+                        
+                        <p class="text-gray-600 mt-2 text-sm">
+                            {{ product.description }}
+                        </p>
+
+                        <div class="mt-4">
+                            <button class="w-full bg-indigo-600 text-white font-bold py-2 px-4 rounded hover:bg-indigo-700 transition duration-300">
+                                Voir le produit
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <p class="text-gray-500">Aucun produit trouvé.</p>
+            {% endfor %}
+
+        </div>
+    </div>
+{% endblock %}
