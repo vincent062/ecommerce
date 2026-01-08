@@ -137,4 +137,82 @@ class Order
 
         return $this;
     }
+    // ======================================================
+    //  CHAMPS ADRESSE DE LIVRAISON
+    // ======================================================
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $deliveryName = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $deliveryAddress = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $deliveryZipcode = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $deliveryCity = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $deliveryCountry = null;
+
+    public function getDeliveryName(): ?string
+    {
+        return $this->deliveryName;
+    }
+
+    public function setDeliveryName(?string $deliveryName): static
+    {
+        $this->deliveryName = $deliveryName;
+
+        return $this;
+    }
+
+    public function getDeliveryAddress(): ?string
+    {
+        return $this->deliveryAddress;
+    }
+
+    public function setDeliveryAddress(?string $deliveryAddress): static
+    {
+        $this->deliveryAddress = $deliveryAddress;
+
+        return $this;
+    }
+
+    public function getDeliveryZipcode(): ?string
+    {
+        return $this->deliveryZipcode;
+    }
+
+    public function setDeliveryZipcode(?string $deliveryZipcode): static
+    {
+        $this->deliveryZipcode = $deliveryZipcode;
+
+        return $this;
+    }
+
+    public function getDeliveryCity(): ?string
+    {
+        return $this->deliveryCity;
+    }
+
+    public function setDeliveryCity(?string $deliveryCity): static
+    {
+        $this->deliveryCity = $deliveryCity;
+
+        return $this;
+    }
+
+    public function getDeliveryCountry(): ?string
+    {
+        return $this->deliveryCountry;
+    }
+
+    public function setDeliveryCountry(?string $deliveryCountry): static
+    {
+        $this->deliveryCountry = $deliveryCountry;
+
+        return $this;
+    }
 }

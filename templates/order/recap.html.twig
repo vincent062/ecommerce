@@ -1,95 +1,80 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Paiement - Sunset Shop{% endblock %}
+{% block title %}Confirmation - Sunset Shop{% endblock %}
 
 {% block body %}
-<div class="bg-stone-50 min-h-screen py-16">
-    <div class="container mx-auto px-4 max-w-4xl">
+<div class="min-h-screen py-12 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-orange-200/60 via-rose-50 to-orange-300/50 flex items-center justify-center">
+    <div class="container mx-auto px-4 max-w-3xl">
         
-        <h1 class="text-3xl font-black text-stone-900 mb-8 text-center">
-            Paiement sécurisé <span class="text-orange-500">.</span>
-        </h1>
+        {# Message de succès #}
+        <div class="text-center mb-10">
+            <div class="inline-flex items-center justify-center w-20 h-20 rounded-full bg-green-100 text-green-600 mb-6 shadow-lg shadow-green-500/20 animate-bounce">
+                <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+            </div>
+            <h1 class="text-4xl font-black text-stone-800 mb-2 drop-shadow-sm">Commande Validée !</h1>
+            <p class="text-stone-600 text-lg">Merci pour votre achat chez Sunset Shop ☀️</p>
+            <p class="text-sm text-stone-400 mt-2 font-mono">Réf: #{{ order.reference }}</p>
+        </div>
 
-        <div class="flex flex-col md:flex-row gap-8">
+        {# Carte Récapitulative #}
+        <div class="bg-white rounded-[2.5rem] overflow-hidden shadow-[0_20px_60px_-15px_rgba(249,115,22,0.3)] border border-orange-100/50 relative z-10">
             
-            {# 1. RÉCAPITULATIF (GAUCHE) #}
-            <div class="md:w-1/2">
-                <div class="bg-white rounded-3xl p-8 shadow-xl border border-stone-100">
-                    <h2 class="text-xl font-bold mb-6 text-stone-800">Récapitulatif</h2>
-                    
-                    <div class="space-y-4 mb-6 max-h-60 overflow-y-auto pr-2">
-                        {% for item in items %}
-                            <div class="flex justify-between items-center text-sm">
-                                <div class="flex items-center gap-3">
-                                    <span class="font-bold text-stone-600">x{{ item.quantity }}</span>
-                                    <span class="text-stone-800">{{ item.product.name }}</span>
-                                </div>
-                                <span class="font-medium text-stone-500">
-                                    {{ (item.product.price * item.quantity) / 100 }} €
-                                </span>
-                            </div>
-                        {% endfor %}
+            {# En-tête de la carte #}
+            <div class="bg-gradient-to-r from-orange-50 to-rose-50 p-8 border-b border-orange-100/50">
+                <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+                    <div class="text-center md:text-left">
+                        <p class="text-xs font-bold text-orange-600 uppercase tracking-wider mb-1">Adresse de livraison</p>
+                        <h3 class="font-bold text-stone-800 text-lg">{{ order.deliveryName }}</h3>
+                        <p class="text-stone-600">{{ order.deliveryAddress }}</p>
+                        <p class="text-stone-600">{{ order.deliveryZipcode }} {{ order.deliveryCity }} - {{ order.deliveryCountry }}</p>
                     </div>
+                    <div class="text-center md:text-right">
+                         <p class="text-xs font-bold text-orange-600 uppercase tracking-wider mb-1">Date de commande</p>
+                         <p class="font-bold text-stone-800">{{ order.createdAt|date('d/m/Y') }}</p>
+                    </div>
+                </div>
+            </div>
+{# Liste des produits #}
+            <div class="p-8">
+                <h3 class="text-lg font-bold text-stone-800 mb-6">Détails de la commande</h3>
+                
+                <div class="space-y-4 mb-8">
+                    {% set finalTotal = 0 %}
+                    
+                    {# BOUCLE SUR LES PRODUITS #}
+                    {% for detail in order.orderDetails %}
+                        <div class="flex justify-between items-center border-b border-stone-100 pb-2">
+                            <div>
+                                <h4 class="font-bold text-stone-700">{{ detail.product }}</h4>
+                                <p class="text-xs text-stone-500">Quantité : {{ detail.quantity }} x {{ (detail.price / 100) }} €</p>
+                            </div>
+                            <div class="font-bold text-stone-800">
+                                {{ (detail.total / 100) }} €
+                            </div>
+                        </div>
+                        
+                        {# On ajoute au total global #}
+                        {% set finalTotal = finalTotal + detail.total %}
+                    {% else %}
+                        <p class="text-stone-500 italic">Aucun détail disponible.</p>
+                    {% endfor %}
+                </div>
 
-                    <div class="border-t border-stone-100 pt-4 flex justify-between items-center">
-                        <span class="font-bold text-lg text-stone-900">Total à payer</span>
-                        <span class="font-black text-2xl text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-rose-600">
-                            {{ total / 100 }} €
+                <div class="border-t-2 border-dashed border-orange-100 pt-6">
+                    <div class="flex justify-between items-center">
+                        <span class="text-lg font-bold text-stone-600">Total payé</span>
+                        <span class="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-orange-600 to-rose-600">
+                           {{ (finalTotal / 100) }} €
                         </span>
                     </div>
                 </div>
-            </div>
 
-            {# 2. FAUX FORMULAIRE CARTE (DROITE) #}
-            <div class="md:w-1/2">
-                <div class="bg-stone-900 rounded-3xl p-8 shadow-2xl relative overflow-hidden text-white">
-                    {# Déco de fond #}
-                    <div class="absolute -top-10 -right-10 w-40 h-40 bg-gradient-to-br from-orange-500 to-purple-600 rounded-full blur-3xl opacity-30"></div>
-
-                    <h2 class="text-xl font-bold mb-6">Carte Bancaire</h2>
-
-                    {# On simule un formulaire qui envoie vers la validation #}
-                    <form action="{{ path('order_validate') }}" method="POST" class="space-y-5">
-                        
-                        {# Numéro #}
-                        <div>
-                            <label class="text-xs text-stone-400 uppercase font-bold tracking-wider">Numéro de carte</label>
-                            <input type="text" placeholder="0000 0000 0000 0000" class="w-full bg-stone-800 border border-stone-700 rounded-xl px-4 py-3 text-white placeholder-stone-600 focus:outline-none focus:border-orange-500 transition mt-1 font-mono">
-                        </div>
-
-                        <div class="flex gap-4">
-                            {# Date #}
-                            <div class="w-1/2">
-                                <label class="text-xs text-stone-400 uppercase font-bold tracking-wider">Expiration</label>
-                                <input type="text" placeholder="MM/AA" class="w-full bg-stone-800 border border-stone-700 rounded-xl px-4 py-3 text-white placeholder-stone-600 focus:outline-none focus:border-orange-500 transition mt-1 text-center font-mono">
-                            </div>
-                            {# CVC #}
-                            <div class="w-1/2">
-                                <label class="text-xs text-stone-400 uppercase font-bold tracking-wider">CVC</label>
-                                <input type="text" placeholder="123" class="w-full bg-stone-800 border border-stone-700 rounded-xl px-4 py-3 text-white placeholder-stone-600 focus:outline-none focus:border-orange-500 transition mt-1 text-center font-mono">
-                            </div>
-                        </div>
-
-                        {# Titulaire #}
-                        <div>
-                            <label class="text-xs text-stone-400 uppercase font-bold tracking-wider">Titulaire</label>
-                            <input type="text" value="{{ app.user.firstname }} {{ app.user.lastname }}" class="w-full bg-stone-800 border border-stone-700 rounded-xl px-4 py-3 text-white placeholder-stone-600 focus:outline-none focus:border-orange-500 transition mt-1 uppercase">
-                        </div>
-
-                        <button type="submit" class="w-full py-4 mt-4 bg-gradient-to-r from-orange-500 to-rose-600 rounded-xl font-bold text-white shadow-lg hover:shadow-orange-500/40 hover:scale-[1.02] transition duration-300 flex justify-center items-center gap-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                            </svg>
-                            Payer {{ total / 100 }} €
-                        </button>
-                    </form>
+                <div class="mt-8 text-center">
+                    <a href="{{ path('app_home') }}" class="inline-block py-4 px-10 bg-stone-900 text-white font-bold rounded-2xl hover:bg-orange-600 hover:shadow-lg hover:shadow-orange-500/30 transition transform hover:-translate-y-1">
+                        Retourner à la boutique
+                    </a>
                 </div>
-                
-                <p class="text-center text-stone-400 text-xs mt-4">
-                    <span class="inline-block w-2 h-2 bg-green-500 rounded-full mr-1"></span> Paiement sécurisé (Simulation)
-                </p>
             </div>
-
         </div>
     </div>
 </div>

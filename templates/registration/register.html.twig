@@ -3,121 +3,77 @@
 {% block title %}Inscription - Sunset Shop{% endblock %}
 
 {% block body %}
-<div class="min-h-[calc(100vh-80px)] flex items-center justify-center bg-stone-50 py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
-    
-    {# Fond d'ambiance #}
-    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-gradient-to-br from-rose-400 to-orange-600 rounded-full blur-3xl opacity-20 pointer-events-none"></div>
-
-    <div class="max-w-md w-full space-y-8 relative z-10">
+{# CHANGEMENT 1 : FOND PLUS COLORÉ ET CHALEUREUX #}
+{# On utilise des tons 200/100 avec de l'opacité pour une ambiance "fin de journée d'été" #}
+<div class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-orange-200/80 via-rose-100/50 to-orange-300/60">
+    <div class="max-w-md w-full space-y-8">
         
-        {# CARTE D'INSCRIPTION #}
-        <div class="bg-stone-900 p-8 md:p-10 rounded-3xl shadow-2xl border border-stone-800">
+        <div class="text-center">
+            <h1 class="mt-6 text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-orange-700 to-rose-700 drop-shadow-sm">
+                Rejoignez-nous
+            </h1>
+            <p class="mt-2 text-stone-700 font-medium text-lg">
+                Votre espace cocooning vous attend
+            </p>
+        </div>
+
+        {# CHANGEMENT 2 : OMBRE TRÈS PRONONCÉE ET COLORÉE #}
+        {# C'est une double ombre orange pour un effet de flottement intense #}
+        <div class="bg-white py-8 px-4 rounded-[2rem] sm:px-10 border border-orange-100/50 shadow-[0_20px_40px_-15px_rgba(249,115,22,0.3),_0_40px_100px_-20px_rgba(249,115,22,0.2)] relative z-10">
             
-            <div class="text-center mb-8">
-                <div class="mx-auto h-12 w-12 bg-gradient-to-br from-orange-500 to-rose-600 rounded-xl flex items-center justify-center text-white font-black text-xl shadow-lg mb-4 transform hover:-rotate-12 transition duration-500">
-                    +
-                </div>
-                <h2 class="text-3xl font-black text-white tracking-tight">
-                    Rejoignez-nous
-                </h2>
-                <p class="mt-2 text-sm text-stone-400">
-                    Créez votre compte client
-                </p>
-            </div>
+            {% for flash_error in app.flashes('verify_email_error') %}
+                <div class="mb-4 p-4 rounded-xl bg-rose-50 text-rose-600 text-sm font-bold border border-rose-100" role="alert">{{ flash_error }}</div>
+            {% endfor %}
 
-            {{ form_errors(registrationForm) }}
-
-            {{ form_start(registrationForm, {'attr': {'class': 'mt-8 space-y-4'}}) }}
+            {{ form_start(registrationForm, {'attr': {'class': 'space-y-5'}}) }}
                 
-                {# LIGNE PRÉNOM / NOM #}
-                <div class="flex gap-4">
-                    {# Prénom #}
-                    <div class="w-1/2">
-                        {{ form_label(registrationForm.firstname, 'Prénom', {'label_attr': {'class': 'sr-only'}}) }}
-                        {{ form_widget(registrationForm.firstname, {
-                            'attr': {
-                                'class': 'appearance-none rounded-xl relative block w-full px-4 py-3 border border-stone-700 bg-stone-800 placeholder-stone-500 text-white focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent sm:text-sm transition duration-200',
-                                'placeholder': 'Prénom'
-                            }
-                        }) }}
-                        <div class="text-rose-500 text-xs mt-1 ml-1">
-                            {{ form_errors(registrationForm.firstname) }}
-                        </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        {{ form_label(registrationForm.firstname, null, {'label_attr': {'class': 'block text-sm font-bold text-stone-700 mb-1 pl-2'}}) }}
+                        {{ form_widget(registrationForm.firstname, {'attr': {'class': 'w-full p-4 rounded-2xl border-orange-50 bg-orange-50/50 focus:bg-white focus:border-orange-400 focus:ring-4 focus:ring-orange-200/50 transition duration-200 outline-none font-medium'}}) }}
+                        {{ form_errors(registrationForm.firstname) }}
                     </div>
-
-                    {# Nom #}
-                    <div class="w-1/2">
-                        {{ form_label(registrationForm.lastname, 'Nom', {'label_attr': {'class': 'sr-only'}}) }}
-                        {{ form_widget(registrationForm.lastname, {
-                            'attr': {
-                                'class': 'appearance-none rounded-xl relative block w-full px-4 py-3 border border-stone-700 bg-stone-800 placeholder-stone-500 text-white focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent sm:text-sm transition duration-200',
-                                'placeholder': 'Nom'
-                            }
-                        }) }}
-                        <div class="text-rose-500 text-xs mt-1 ml-1">
-                            {{ form_errors(registrationForm.lastname) }}
-                        </div>
+                    <div>
+                        {{ form_label(registrationForm.lastname, null, {'label_attr': {'class': 'block text-sm font-bold text-stone-700 mb-1 pl-2'}}) }}
+                        {{ form_widget(registrationForm.lastname, {'attr': {'class': 'w-full p-4 rounded-2xl border-orange-50 bg-orange-50/50 focus:bg-white focus:border-orange-400 focus:ring-4 focus:ring-orange-200/50 transition duration-200 outline-none font-medium'}}) }}
+                        {{ form_errors(registrationForm.lastname) }}
                     </div>
                 </div>
 
-                {# EMAIL #}
                 <div>
-                    {{ form_label(registrationForm.email, 'Adresse Email', {'label_attr': {'class': 'sr-only'}}) }}
-                    {{ form_widget(registrationForm.email, {
-                        'attr': {
-                            'class': 'appearance-none rounded-xl relative block w-full px-4 py-3 border border-stone-700 bg-stone-800 placeholder-stone-500 text-white focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent sm:text-sm transition duration-200',
-                            'placeholder': 'Votre adresse email'
-                        }
-                    }) }}
-                    <div class="text-rose-500 text-xs mt-1 ml-1">
-                        {{ form_errors(registrationForm.email) }}
-                    </div>
+                    {{ form_label(registrationForm.email, null, {'label_attr': {'class': 'block text-sm font-bold text-stone-700 mb-1 pl-2'}}) }}
+                    {{ form_widget(registrationForm.email, {'attr': {'class': 'w-full p-4 rounded-2xl border-orange-50 bg-orange-50/50 focus:bg-white focus:border-orange-400 focus:ring-4 focus:ring-orange-200/50 transition duration-200 outline-none font-medium'}}) }}
+                    {{ form_errors(registrationForm.email) }}
                 </div>
 
-                {# MOT DE PASSE #}
                 <div>
-                    {{ form_label(registrationForm.plainPassword, 'Mot de passe', {'label_attr': {'class': 'sr-only'}}) }}
-                    {{ form_widget(registrationForm.plainPassword, {
-                        'attr': {
-                            'class': 'appearance-none rounded-xl relative block w-full px-4 py-3 border border-stone-700 bg-stone-800 placeholder-stone-500 text-white focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent sm:text-sm transition duration-200',
-                            'placeholder': 'Choisissez un mot de passe'
-                        }
-                    }) }}
-                     <div class="text-rose-500 text-xs mt-1 ml-1">
-                        {{ form_errors(registrationForm.plainPassword) }}
-                    </div>
+                    {{ form_label(registrationForm.plainPassword, null, {'label_attr': {'class': 'block text-sm font-bold text-stone-700 mb-1 pl-2'}}) }}
+                    {{ form_widget(registrationForm.plainPassword, {'attr': {'class': 'w-full p-4 rounded-2xl border-orange-50 bg-orange-50/50 focus:bg-white focus:border-orange-400 focus:ring-4 focus:ring-orange-200/50 transition duration-200 outline-none font-medium'}}) }}
+                    {{ form_errors(registrationForm.plainPassword) }}
                 </div>
 
-                {# CGU (CHECKBOX) #}
-                <div class="flex items-center py-2">
-                    {{ form_widget(registrationForm.agreeTerms, {
-                        'attr': {
-                            'class': 'h-4 w-4 text-orange-600 focus:ring-orange-500 border-stone-700 rounded bg-stone-800 cursor-pointer'
-                        }
-                    }) }}
-                    <label for="{{ registrationForm.agreeTerms.vars.id }}" class="ml-2 block text-sm text-stone-400 cursor-pointer hover:text-stone-300">
-                        J'accepte les <a href="#" class="underline hover:text-orange-500">conditions d'utilisation</a>
-                    </label>
-                </div>
-                <div class="text-rose-500 text-xs ml-1">
-                    {{ form_errors(registrationForm.agreeTerms) }}
+                <div class="flex items-center mt-4 mb-6 pl-2">
+                    {{ form_widget(registrationForm.agreeTerms, {'attr': {'class': 'w-5 h-5 text-orange-600 border-orange-300 rounded focus:ring-orange-500 cursor-pointer'}}) }}
+                    {{ form_label(registrationForm.agreeTerms, null, {'label_attr': {'class': 'ml-3 text-sm text-stone-600 select-none cursor-pointer'}}) }}
                 </div>
 
-                {# BOUTON #}
                 <div>
-                    <button type="submit" class="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-bold rounded-xl text-white bg-gradient-to-r from-orange-500 to-rose-600 hover:from-orange-600 hover:to-rose-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-stone-900 focus:ring-orange-500 transition duration-300 shadow-lg hover:shadow-orange-500/20 hover:scale-[1.02]">
-                        Créer mon compte
+                    <button type="submit" class="w-full flex justify-center py-4 px-4 border border-transparent text-lg font-bold rounded-2xl text-white bg-gradient-to-r from-orange-500 to-rose-500 hover:from-orange-600 hover:to-rose-600 focus:outline-none focus:ring-4 focus:ring-orange-300 transition-all shadow-[0_10px_30px_-10px_rgba(249,115,22,0.5)] hover:shadow-[0_20px_40px_-10px_rgba(249,115,22,0.6)] transform hover:-translate-y-1">
+                        S'inscrire maintenant
                     </button>
                 </div>
 
             {{ form_end(registrationForm) }}
-            
-            <div class="mt-8 pt-6 border-t border-stone-800 text-center">
-                 <p class="text-stone-500 text-sm">
-                    Déjà inscrit ?
-                    <a href="{{ path('app_login') }}" class="text-white hover:text-orange-400 font-bold transition ml-1">Se connecter</a>
-                 </p>
+
+            <div class="mt-8 text-center border-t border-orange-100 pt-6">
+                <p class="text-stone-600">
+                    Déjà membre ? 
+                    <a href="{{ path('app_login') }}" class="font-black text-orange-600 hover:text-rose-700 underline decoration-2 decoration-orange-300 underline-offset-4 transition">
+                        Connectez-vous
+                    </a>
+                </p>
             </div>
+
         </div>
     </div>
 </div>
