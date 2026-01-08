@@ -51,7 +51,7 @@
 
                         {# Prix #}
                         <div class="text-3xl font-light text-stone-800 mb-8">
-                            {{ product.price }} €
+                        {{ (product.price / 100) | number_format (2,',','')}} €
                         </div>
 
                         {# Description #}

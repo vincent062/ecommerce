@@ -1,0 +1,96 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Paiement - Sunset Shop{% endblock %}
+
+{% block body %}
+<div class="bg-stone-50 min-h-screen py-16">
+    <div class="container mx-auto px-4 max-w-4xl">
+        
+        <h1 class="text-3xl font-black text-stone-900 mb-8 text-center">
+            Paiement sécurisé <span class="text-orange-500">.</span>
+        </h1>
+
+        <div class="flex flex-col md:flex-row gap-8">
+            
+            {# 1. RÉCAPITULATIF (GAUCHE) #}
+            <div class="md:w-1/2">
+                <div class="bg-white rounded-3xl p-8 shadow-xl border border-stone-100">
+                    <h2 class="text-xl font-bold mb-6 text-stone-800">Récapitulatif</h2>
+                    
+                    <div class="space-y-4 mb-6 max-h-60 overflow-y-auto pr-2">
+                        {% for item in items %}
+                            <div class="flex justify-between items-center text-sm">
+                                <div class="flex items-center gap-3">
+                                    <span class="font-bold text-stone-600">x{{ item.quantity }}</span>
+                                    <span class="text-stone-800">{{ item.product.name }}</span>
+                                </div>
+                                <span class="font-medium text-stone-500">
+                                    {{ (item.product.price * item.quantity) / 100 }} €
+                                </span>
+                            </div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="border-t border-stone-100 pt-4 flex justify-between items-center">
+                        <span class="font-bold text-lg text-stone-900">Total à payer</span>
+                        <span class="font-black text-2xl text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-rose-600">
+                            {{ total / 100 }} €
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            {# 2. FAUX FORMULAIRE CARTE (DROITE) #}
+            <div class="md:w-1/2">
+                <div class="bg-stone-900 rounded-3xl p-8 shadow-2xl relative overflow-hidden text-white">
+                    {# Déco de fond #}
+                    <div class="absolute -top-10 -right-10 w-40 h-40 bg-gradient-to-br from-orange-500 to-purple-600 rounded-full blur-3xl opacity-30"></div>
+
+                    <h2 class="text-xl font-bold mb-6">Carte Bancaire</h2>
+
+                    {# On simule un formulaire qui envoie vers la validation #}
+                    <form action="{{ path('order_validate') }}" method="POST" class="space-y-5">
+                        
+                        {# Numéro #}
+                        <div>
+                            <label class="text-xs text-stone-400 uppercase font-bold tracking-wider">Numéro de carte</label>
+                            <input type="text" placeholder="0000 0000 0000 0000" class="w-full bg-stone-800 border border-stone-700 rounded-xl px-4 py-3 text-white placeholder-stone-600 focus:outline-none focus:border-orange-500 transition mt-1 font-mono">
+                        </div>
+
+                        <div class="flex gap-4">
+                            {# Date #}
+                            <div class="w-1/2">
+                                <label class="text-xs text-stone-400 uppercase font-bold tracking-wider">Expiration</label>
+                                <input type="text" placeholder="MM/AA" class="w-full bg-stone-800 border border-stone-700 rounded-xl px-4 py-3 text-white placeholder-stone-600 focus:outline-none focus:border-orange-500 transition mt-1 text-center font-mono">
+                            </div>
+                            {# CVC #}
+                            <div class="w-1/2">
+                                <label class="text-xs text-stone-400 uppercase font-bold tracking-wider">CVC</label>
+                                <input type="text" placeholder="123" class="w-full bg-stone-800 border border-stone-700 rounded-xl px-4 py-3 text-white placeholder-stone-600 focus:outline-none focus:border-orange-500 transition mt-1 text-center font-mono">
+                            </div>
+                        </div>
+
+                        {# Titulaire #}
+                        <div>
+                            <label class="text-xs text-stone-400 uppercase font-bold tracking-wider">Titulaire</label>
+                            <input type="text" value="{{ app.user.firstname }} {{ app.user.lastname }}" class="w-full bg-stone-800 border border-stone-700 rounded-xl px-4 py-3 text-white placeholder-stone-600 focus:outline-none focus:border-orange-500 transition mt-1 uppercase">
+                        </div>
+
+                        <button type="submit" class="w-full py-4 mt-4 bg-gradient-to-r from-orange-500 to-rose-600 rounded-xl font-bold text-white shadow-lg hover:shadow-orange-500/40 hover:scale-[1.02] transition duration-300 flex justify-center items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                            </svg>
+                            Payer {{ total / 100 }} €
+                        </button>
+                    </form>
+                </div>
+                
+                <p class="text-center text-stone-400 text-xs mt-4">
+                    <span class="inline-block w-2 h-2 bg-green-500 rounded-full mr-1"></span> Paiement sécurisé (Simulation)
+                </p>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

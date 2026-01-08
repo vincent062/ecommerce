@@ -107,4 +107,27 @@ class CartController extends AbstractController
 
         return $this->redirectToRoute('cart_index');
     }
+    #[Route('/cart/delete/{id}', name: 'cart_delete')]
+    public function delete($id, RequestStack $requestStack): Response
+    {
+        $session = $requestStack->getSession();
+        $cart = $session->get('cart', []);
+
+        if (!empty($cart[$id])) {
+            unset($cart[$id]); // On supprime complètement l'entrée du tableau
+        }
+
+        $session->set('cart', $cart);
+
+        // On redirige vers le panier
+        return $this->redirectToRoute('cart_index');
+    }
+    #[Route('/cart/delete-all', name: 'cart_delete_all')]
+    public function deleteAll(RequestStack $requestStack): Response
+    {
+        $session = $requestStack->getSession();
+        $session->remove('cart');
+
+        return $this->redirectToRoute('cart_index');
+    }
 }

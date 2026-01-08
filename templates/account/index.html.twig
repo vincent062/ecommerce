@@ -101,9 +101,9 @@
                                 <div class="bg-stone-50 px-6 py-3 border-t border-stone-100 flex justify-between items-center">
                                     <span class="text-xs text-stone-400 font-mono">ID: {{ order.id }}</span>
                                     {# Tu pourras ajouter un lien vers le détail plus tard #}
-                                    <button class="text-sm font-bold text-stone-600 hover:text-orange-600 transition">
-                                        Voir le détail &rarr;
-                                    </button>
+                                    <a href="{{ path('order_show', {id: order.id}) }}" class="text-sm font-bold text-stone-600 hover:text-orange-600 transition">
+                                            Voir le détail &rarr;
+                                    </a>
                                 </div>
                             </div>
                         {% endfor %}

@@ -1,0 +1,57 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gérer mes adresses - Sunset Shop{% endblock %}
+
+{% block body %}
+<div class="bg-stone-50 min-h-screen flex items-center justify-center py-12 px-4">
+    <div class="max-w-2xl w-full">
+        
+        <h1 class="text-3xl font-black text-center text-stone-900 mb-8">
+            Adresse de livraison <span class="text-orange-500">.</span>
+        </h1>
+
+        <div class="bg-white p-8 md:p-10 rounded-3xl shadow-2xl border border-stone-100">
+            {{ form_start(form, {'attr': {'class': 'space-y-6'}}) }}
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="col-span-2">
+                        {{ form_row(form.name, {'attr': {'class': 'w-full p-3 rounded-xl border border-stone-200 bg-stone-50 focus:ring-2 focus:ring-orange-500 focus:outline-none'}}) }}
+                    </div>
+                    <div>
+                        {{ form_row(form.firstname, {'attr': {'class': 'w-full p-3 rounded-xl border border-stone-200 bg-stone-50 focus:ring-2 focus:ring-orange-500 focus:outline-none'}}) }}
+                    </div>
+                    <div>
+                        {{ form_row(form.lastname, {'attr': {'class': 'w-full p-3 rounded-xl border border-stone-200 bg-stone-50 focus:ring-2 focus:ring-orange-500 focus:outline-none'}}) }}
+                    </div>
+                    <div class="col-span-2">
+                        {{ form_row(form.company, {'attr': {'class': 'w-full p-3 rounded-xl border border-stone-200 bg-stone-50 focus:ring-2 focus:ring-orange-500 focus:outline-none'}}) }}
+                    </div>
+                    <div class="col-span-2">
+                        {{ form_row(form.address, {'attr': {'class': 'w-full p-3 rounded-xl border border-stone-200 bg-stone-50 focus:ring-2 focus:ring-orange-500 focus:outline-none'}}) }}
+                    </div>
+                    <div>
+                        {{ form_row(form.zipcode, {'attr': {'class': 'w-full p-3 rounded-xl border border-stone-200 bg-stone-50 focus:ring-2 focus:ring-orange-500 focus:outline-none'}}) }}
+                    </div>
+                    <div>
+                        {{ form_row(form.city, {'attr': {'class': 'w-full p-3 rounded-xl border border-stone-200 bg-stone-50 focus:ring-2 focus:ring-orange-500 focus:outline-none'}}) }}
+                    </div>
+                    <div>
+                        {{ form_row(form.country, {'attr': {'class': 'w-full p-3 rounded-xl border border-stone-200 bg-stone-50 focus:ring-2 focus:ring-orange-500 focus:outline-none'}}) }}
+                    </div>
+                    <div>
+                        {{ form_row(form.phone, {'attr': {'class': 'w-full p-3 rounded-xl border border-stone-200 bg-stone-50 focus:ring-2 focus:ring-orange-500 focus:outline-none'}}) }}
+                    </div>
+                </div>
+
+                <div class="pt-6">
+                    <button type="submit" class="w-full py-4 bg-stone-900 text-white font-bold rounded-xl hover:bg-orange-600 transition shadow-lg hover:shadow-orange-500/20 transform hover:scale-[1.01]">
+                        Enregistrer cette adresse
+                    </button>
+                    <a href="{{ path('account_address') }}" class="block text-center mt-4 text-stone-500 hover:text-stone-800 text-sm font-bold">Annuler</a>
+                </div>
+
+            {{ form_end(form) }}
+        </div>
+    </div>
+</div>
+{% endblock %}
