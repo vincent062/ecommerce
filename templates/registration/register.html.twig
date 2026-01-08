@@ -1,107 +1,124 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Créer un compte - Golden Hour{% endblock %}
+{% block title %}Inscription - Sunset Shop{% endblock %}
 
 {% block body %}
-<div class="min-h-[calc(100vh-80px)] flex items-center justify-center bg-stone-50 py-12 px-4 sm:px-6 lg:px-8">
-    <div class="max-w-md w-full space-y-8 bg-white p-10 rounded-3xl shadow-xl border border-stone-100">
+<div class="min-h-[calc(100vh-80px)] flex items-center justify-center bg-stone-50 py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+    
+    {# Fond d'ambiance #}
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-gradient-to-br from-rose-400 to-orange-600 rounded-full blur-3xl opacity-20 pointer-events-none"></div>
+
+    <div class="max-w-md w-full space-y-8 relative z-10">
         
-        <div class="text-center">
-            <h2 class="mt-6 text-center text-3xl font-serif font-bold text-stone-900">
-                Bienvenue chez nous
-            </h2>
-            <p class="mt-2 text-center text-sm text-stone-500">
-                Créez votre compte pour suivre vos commandes.
-            </p>
-        </div>
-
-        {# Début du formulaire #}
-        {{ form_start(registrationForm, {'attr': {'class': 'mt-8 space-y-6'}}) }}
+        {# CARTE D'INSCRIPTION #}
+        <div class="bg-stone-900 p-8 md:p-10 rounded-3xl shadow-2xl border border-stone-800">
             
-            {# Erreurs globales #}
-            {% if form_errors(registrationForm) %}
-                <div class="bg-red-50 text-red-600 p-3 rounded-lg text-sm text-center border border-red-200">
-                    {{ form_errors(registrationForm) }}
+            <div class="text-center mb-8">
+                <div class="mx-auto h-12 w-12 bg-gradient-to-br from-orange-500 to-rose-600 rounded-xl flex items-center justify-center text-white font-black text-xl shadow-lg mb-4 transform hover:-rotate-12 transition duration-500">
+                    +
                 </div>
-            {% endif %}
+                <h2 class="text-3xl font-black text-white tracking-tight">
+                    Rejoignez-nous
+                </h2>
+                <p class="mt-2 text-sm text-stone-400">
+                    Créez votre compte client
+                </p>
+            </div>
 
-            <div class="space-y-4">
+            {{ form_errors(registrationForm) }}
+
+            {{ form_start(registrationForm, {'attr': {'class': 'mt-8 space-y-4'}}) }}
                 
-                {# PRÉNOM #}
-                <div>
-                    <label for="registration_form_firstname" class="block text-xs font-bold text-stone-500 uppercase tracking-wider mb-1">Prénom</label>
-                    {{ form_widget(registrationForm.firstname, {
-                        'attr': {
-                            'class': 'appearance-none rounded-xl relative block w-full px-4 py-3 border border-stone-300 placeholder-stone-400 text-stone-900 focus:outline-none focus:ring-rose-500 focus:border-rose-500 focus:z-10 sm:text-sm',
-                            'placeholder': 'Votre prénom'
-                        }
-                    }) }}
-                    <div class="text-rose-500 text-xs mt-1 font-bold">{{ form_errors(registrationForm.firstname) }}</div>
-                </div>
+                {# LIGNE PRÉNOM / NOM #}
+                <div class="flex gap-4">
+                    {# Prénom #}
+                    <div class="w-1/2">
+                        {{ form_label(registrationForm.firstname, 'Prénom', {'label_attr': {'class': 'sr-only'}}) }}
+                        {{ form_widget(registrationForm.firstname, {
+                            'attr': {
+                                'class': 'appearance-none rounded-xl relative block w-full px-4 py-3 border border-stone-700 bg-stone-800 placeholder-stone-500 text-white focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent sm:text-sm transition duration-200',
+                                'placeholder': 'Prénom'
+                            }
+                        }) }}
+                        <div class="text-rose-500 text-xs mt-1 ml-1">
+                            {{ form_errors(registrationForm.firstname) }}
+                        </div>
+                    </div>
 
-                {# NOM #}
-                <div>
-                    <label for="registration_form_lastname" class="block text-xs font-bold text-stone-500 uppercase tracking-wider mb-1">Nom</label>
-                    {{ form_widget(registrationForm.lastname, {
-                        'attr': {
-                            'class': 'appearance-none rounded-xl relative block w-full px-4 py-3 border border-stone-300 placeholder-stone-400 text-stone-900 focus:outline-none focus:ring-rose-500 focus:border-rose-500 focus:z-10 sm:text-sm',
-                            'placeholder': 'Votre nom'
-                        }
-                    }) }}
-                    <div class="text-rose-500 text-xs mt-1 font-bold">{{ form_errors(registrationForm.lastname) }}</div>
+                    {# Nom #}
+                    <div class="w-1/2">
+                        {{ form_label(registrationForm.lastname, 'Nom', {'label_attr': {'class': 'sr-only'}}) }}
+                        {{ form_widget(registrationForm.lastname, {
+                            'attr': {
+                                'class': 'appearance-none rounded-xl relative block w-full px-4 py-3 border border-stone-700 bg-stone-800 placeholder-stone-500 text-white focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent sm:text-sm transition duration-200',
+                                'placeholder': 'Nom'
+                            }
+                        }) }}
+                        <div class="text-rose-500 text-xs mt-1 ml-1">
+                            {{ form_errors(registrationForm.lastname) }}
+                        </div>
+                    </div>
                 </div>
 
                 {# EMAIL #}
                 <div>
-                    <label for="registration_form_email" class="block text-xs font-bold text-stone-500 uppercase tracking-wider mb-1">Email</label>
+                    {{ form_label(registrationForm.email, 'Adresse Email', {'label_attr': {'class': 'sr-only'}}) }}
                     {{ form_widget(registrationForm.email, {
                         'attr': {
-                            'class': 'appearance-none rounded-xl relative block w-full px-4 py-3 border border-stone-300 placeholder-stone-400 text-stone-900 focus:outline-none focus:ring-rose-500 focus:border-rose-500 focus:z-10 sm:text-sm',
-                            'placeholder': 'exemple@email.com'
+                            'class': 'appearance-none rounded-xl relative block w-full px-4 py-3 border border-stone-700 bg-stone-800 placeholder-stone-500 text-white focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent sm:text-sm transition duration-200',
+                            'placeholder': 'Votre adresse email'
                         }
                     }) }}
-                    <div class="text-rose-500 text-xs mt-1 font-bold">{{ form_errors(registrationForm.email) }}</div>
+                    <div class="text-rose-500 text-xs mt-1 ml-1">
+                        {{ form_errors(registrationForm.email) }}
+                    </div>
                 </div>
 
                 {# MOT DE PASSE #}
                 <div>
-                    <label for="registration_form_plainPassword" class="block text-xs font-bold text-stone-500 uppercase tracking-wider mb-1">Mot de passe</label>
+                    {{ form_label(registrationForm.plainPassword, 'Mot de passe', {'label_attr': {'class': 'sr-only'}}) }}
                     {{ form_widget(registrationForm.plainPassword, {
                         'attr': {
-                            'class': 'appearance-none rounded-xl relative block w-full px-4 py-3 border border-stone-300 placeholder-stone-400 text-stone-900 focus:outline-none focus:ring-rose-500 focus:border-rose-500 focus:z-10 sm:text-sm',
-                            'placeholder': '••••••••'
+                            'class': 'appearance-none rounded-xl relative block w-full px-4 py-3 border border-stone-700 bg-stone-800 placeholder-stone-500 text-white focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent sm:text-sm transition duration-200',
+                            'placeholder': 'Choisissez un mot de passe'
                         }
                     }) }}
-                    <div class="text-rose-500 text-xs mt-1 font-bold">{{ form_errors(registrationForm.plainPassword) }}</div>
+                     <div class="text-rose-500 text-xs mt-1 ml-1">
+                        {{ form_errors(registrationForm.plainPassword) }}
+                    </div>
                 </div>
 
-                {# CHECKBOX CGU #}
-                <div class="flex items-center">
-                    {{ form_widget(registrationForm.agreeTerms, {'attr': {'class': 'h-4 w-4 text-rose-600 focus:ring-rose-500 border-stone-300 rounded'}}) }}
-                    <label class="ml-2 block text-sm text-stone-900">
-                        J'accepte les conditions d'utilisation
+                {# CGU (CHECKBOX) #}
+                <div class="flex items-center py-2">
+                    {{ form_widget(registrationForm.agreeTerms, {
+                        'attr': {
+                            'class': 'h-4 w-4 text-orange-600 focus:ring-orange-500 border-stone-700 rounded bg-stone-800 cursor-pointer'
+                        }
+                    }) }}
+                    <label for="{{ registrationForm.agreeTerms.vars.id }}" class="ml-2 block text-sm text-stone-400 cursor-pointer hover:text-stone-300">
+                        J'accepte les <a href="#" class="underline hover:text-orange-500">conditions d'utilisation</a>
                     </label>
                 </div>
-                <div class="text-rose-500 text-xs font-bold">{{ form_errors(registrationForm.agreeTerms) }}</div>
+                <div class="text-rose-500 text-xs ml-1">
+                    {{ form_errors(registrationForm.agreeTerms) }}
+                </div>
 
+                {# BOUTON #}
+                <div>
+                    <button type="submit" class="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-bold rounded-xl text-white bg-gradient-to-r from-orange-500 to-rose-600 hover:from-orange-600 hover:to-rose-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-stone-900 focus:ring-orange-500 transition duration-300 shadow-lg hover:shadow-orange-500/20 hover:scale-[1.02]">
+                        Créer mon compte
+                    </button>
+                </div>
+
+            {{ form_end(registrationForm) }}
+            
+            <div class="mt-8 pt-6 border-t border-stone-800 text-center">
+                 <p class="text-stone-500 text-sm">
+                    Déjà inscrit ?
+                    <a href="{{ path('app_login') }}" class="text-white hover:text-orange-400 font-bold transition ml-1">Se connecter</a>
+                 </p>
             </div>
-
-            <div>
-                <button type="submit" class="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-bold rounded-xl text-white bg-stone-900 hover:bg-rose-600 transition duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-stone-500 shadow-lg hover:shadow-xl">
-                    Créer mon compte
-                </button>
-            </div>
-
-            <div class="text-center mt-4">
-                <p class="text-sm text-stone-500">
-                    Déjà un compte ? 
-                    <a href="{{ path('app_login') }}" class="font-medium text-rose-600 hover:text-rose-500 underline decoration-2 underline-offset-4">
-                        Se connecter
-                    </a>
-                </p>
-            </div>
-
-        {{ form_end(registrationForm) }}
+        </div>
     </div>
 </div>
 {% endblock %}

@@ -41,30 +41,56 @@ class CartController extends AbstractController
         ]);
     }
 
-#[Route('/cart/add/{id}', name: 'cart_add')]
-    public function add($id, Request $request, RequestStack $requestStack): Response
+    #[Route('/cart/add/{id}', name: 'cart_add')]
+    public function add($id, Request $request, RequestStack $requestStack, ProductRepository $productRepository): Response
     {
+        // 1. On récupère le panier et le produit
         $session = $requestStack->getSession();
         $cart = $session->get('cart', []);
-
-        // On récupère la quantité envoyée par le formulaire (par défaut = 1)
-        $qty = $request->request->get('qty', 1);
         
-        // On s'assure que c'est un entier positif
-        $qty = (int)$qty;
+        $product = $productRepository->find($id);
+
+        // Sécurité : si le produit n'existe pas ou plus
+        if (!$product) {
+            return $this->redirectToRoute('cart_index');
+        }
+
+        // 2. On récupère la quantité souhaitée (1 par défaut)
+        $qty = (int)$request->request->get('qty', 1);
         if ($qty < 1) { $qty = 1; }
 
-        // Si le produit existe déjà, on ajoute la quantité
+        // 3. Calcul de la quantité future dans le panier
+        // (Quantité actuelle + Nouvelle quantité)
+        $currentQtyInCart = $cart[$id] ?? 0;
+        $totalQtyWanted = $currentQtyInCart + $qty;
+
+        // 4. VÉRIFICATION DU STOCK
+        if ($product->getStock() < $totalQtyWanted) {
+            // Stock insuffisant : on affiche un message et on n'ajoute PAS
+            $remainingStock = $product->getStock() - $currentQtyInCart;
+            
+            // Petit message sympa pour l'utilisateur
+            if ($remainingStock > 0) {
+                $this->addFlash('warning', "Désolé, il ne reste que $remainingStock exemplaire(s) disponible(s).");
+            } else {
+                $this->addFlash('warning', "Désolé, ce produit n'est plus disponible en quantité suffisante.");
+            }
+            
+            return $this->redirectToRoute('cart_index');
+        }
+
+        // 5. Si tout est bon, on ajoute au panier
         if (!empty($cart[$id])) {
             $cart[$id] += $qty;
         } else {
-            // Sinon on l'initialise avec la quantité choisie
             $cart[$id] = $qty;
         }
 
         $session->set('cart', $cart);
 
-        // On redirige vers le panier (ou on reste sur la page, au choix)
+        // Feedback positif optionnel
+        // $this->addFlash('success', 'Produit ajouté au panier !');
+
         return $this->redirectToRoute('cart_index');
     }
     #[Route('/cart/remove/{id}', name: 'cart_remove')]

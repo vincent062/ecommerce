@@ -21,22 +21,21 @@ class RegistrationFormType extends AbstractType
             ->add('firstname', TextType::class, [
                 'label' => 'Prénom',
                 'constraints' => [
-                    new NotBlank(['message' => 'Veuillez entrer votre prénom']),
+                    // CORRECTION : Utilisation des arguments nommés (message: '...')
+                    new NotBlank(message: 'Veuillez entrer votre prénom'),
                 ],
             ])
             ->add('lastname', TextType::class, [
                 'label' => 'Nom',
                 'constraints' => [
-                    new NotBlank(['message' => 'Veuillez entrer votre nom']),
+                    new NotBlank(message: 'Veuillez entrer votre nom'),
                 ],
             ])
             ->add('email')
             ->add('agreeTerms', CheckboxType::class, [
                 'mapped' => false,
                 'constraints' => [
-                    new IsTrue([
-                        'message' => 'Vous devez accepter nos conditions.',
-                    ]),
+                    new IsTrue(message: 'Vous devez accepter nos conditions.'),
                 ],
             ])
             ->add('plainPassword', PasswordType::class, [
@@ -45,9 +44,7 @@ class RegistrationFormType extends AbstractType
                 'mapped' => false,
                 'attr' => ['autocomplete' => 'new-password'],
                 'constraints' => [
-                    new NotBlank([
-                        'message' => 'Veuillez entrer un mot de passe',
-                    ]),
+                    new NotBlank(message: 'Veuillez entrer un mot de passe'),
                     new Length(
                         min: 6,
                         minMessage: 'Votre mot de passe doit faire au moins {{ limit }} caractères',

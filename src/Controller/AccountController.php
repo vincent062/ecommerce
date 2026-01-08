@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Repository\OrderRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -9,14 +10,16 @@ use Symfony\Component\Routing\Attribute\Route;
 class AccountController extends AbstractController
 {
     #[Route('/account', name: 'app_account')]
-    public function index(): Response
+    public function index(OrderRepository $orderRepository): Response
     {
-        // On vérifie que l'utilisateur est connecté
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        // On récupère les commandes de l'utilisateur, triées par date (la plus récente en haut)
+        $orders = $orderRepository->findBy(
+            ['user' => $this->getUser()],
+            ['createdAt' => 'DESC']
+        );
 
-        // On récupère l'utilisateur connecté
-        // Grâce à la relation qu'on a créée (OneToMany), on pourra accéder à ses commandes via app.user.orders dans la vue
-        
-        return $this->render('account/index.html.twig');
+        return $this->render('account/index.html.twig', [
+            'orders' => $orders,
+        ]);
     }
 }
